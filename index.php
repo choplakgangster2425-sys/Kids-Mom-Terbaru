@@ -20,7 +20,7 @@ $featureHref = static function (string $target) use ($isLoggedIn): string {
     <meta name="theme-color" content="#fff8f8">
     <meta name="description" content="Mom&Kids+ mendampingi ibu memantau tumbuh kembang anak dan menemukan informasi kesehatan keluarga.">
     <title>Mom&Kids+ | Temani Tumbuh Kembang Si Kecil</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=3">
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
 </head>
 <body>
     <header class="site-header">
@@ -91,31 +91,8 @@ $featureHref = static function (string $target) use ($isLoggedIn): string {
                 </div>
             </div>
 
-            <div class="hero-art" aria-label="Ilustrasi ibu dan anak">
-                <div class="art-orbit orbit-one"></div>
-                <div class="art-orbit orbit-two"></div>
-                <div class="art-sun"></div>
-                <div class="art-card">
-                    <span class="art-heart" aria-hidden="true">♡</span>
-                    <div class="art-people" aria-hidden="true">
-                        <span class="person person-mom">♧</span>
-                        <span class="person person-child">♧</span>
-                    </div>
-                    <div class="art-caption">
-                        <span class="caption-label">Bersama setiap hari</span>
-                        <strong>Tumbuh sehat, penuh cinta</strong>
-                    </div>
-                </div>
-                <div class="floating-note growth-note">
-                    <span class="floating-icon" aria-hidden="true">↗</span>
-                    <span><strong>Catatan tumbuh</strong><small>Setiap momen berarti</small></span>
-                </div>
-                <div class="floating-note love-note">
-                    <span class="love-icon" aria-hidden="true">♥</span>
-                    <span><strong>Sehat bersama</strong><small>Langkah kecil, makna besar</small></span>
-                </div>
-                <span class="decor decor-one" aria-hidden="true">✦</span>
-                <span class="decor decor-two" aria-hidden="true">✿</span>
+            <div class="hero-art hero-art-image">
+                <img src="assets/img/family-illustration.svg" alt="Ilustrasi keluarga yang bahagia, ibu dan ayah memeluk anak mereka">
             </div>
         </section>
 
