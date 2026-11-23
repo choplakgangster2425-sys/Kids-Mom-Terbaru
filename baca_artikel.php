@@ -63,6 +63,6 @@ if (!$article) {
             <div class="article-content"><?php echo nl2br(escape_html($article['konten'])); ?></div>
         </article>
     </main>
-    <script src="assets/js/app.js?v=2"></script>
+    <script src="assets/js/app.js?v=3"></script>
 </body>
 </html>

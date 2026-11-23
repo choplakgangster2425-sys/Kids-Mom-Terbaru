@@ -19,7 +19,7 @@ if ($category !== '' && !in_array($category, $categories, true)) {
     exit('Kategori resep tidak valid.');
 }
 
-$recipesSql = 'SELECT id, judul, ringkasan, kategori, created_at
+$recipesSql = 'SELECT id, judul, ringkasan, kategori, gambar_path, created_at
                FROM resep
                WHERE status = :status';
 $parameters = ['status' => 'published'];
@@ -61,17 +61,19 @@ $recipes = $statement->fetchAll();
     </header>
 
     <main class="management-main container">
-        <div class="management-heading">
+        <div class="management-heading" data-reveal>
             <span class="eyebrow">Inspirasi menu sehat</span>
             <h1>Katalog resep</h1>
-            <p>Pilih resep sesuai tahap keluarga dan usia si kecil.</p>
+            <p>Ide menu sederhana dan bernutrisi untuk menemani masa kehamilan hingga setiap tahap makan si kecil.</p>
         </div>
 
         <nav class="category-filter" aria-label="Filter kategori resep">
-            <a class="<?php echo $category === '' ? 'is-active' : ''; ?>" href="resep.php">Semua</a>
+            <a class="<?php echo $category === '' ? 'is-active' : ''; ?>"
+                href="resep.php" <?php echo $category === '' ? 'aria-current="page"' : ''; ?>>Semua</a>
             <?php foreach ($categories as $item): ?>
                 <a class="<?php echo $category === $item ? 'is-active' : ''; ?>"
-                    href="resep.php?kategori=<?php echo rawurlencode($item); ?>">
+                    href="resep.php?kategori=<?php echo rawurlencode($item); ?>"
+                    <?php echo $category === $item ? 'aria-current="page"' : ''; ?>>
                     <?php echo escape_html($item); ?>
                 </a>
             <?php endforeach; ?>
@@ -86,7 +88,20 @@ $recipes = $statement->fetchAll();
         <?php else: ?>
             <div class="article-grid recipe-grid">
                 <?php foreach ($recipes as $recipe): ?>
-                    <article class="article-card recipe-card">
+                    <article class="article-card recipe-card" data-reveal>
+                        <?php
+                            $recipeImage = $recipe['gambar_path'] !== null
+                                ? 'assets/img/' . rawurlencode($recipe['gambar_path'])
+                                : match ($recipe['kategori']) {
+                                    'Ibu Hamil' => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=960&q=85',
+                                    '6-8 Bulan' => 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=960&q=85',
+                                    default => 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=960&q=85',
+                                };
+                        ?>
+                        <a class="article-image recipe-image" href="baca_resep.php?id=<?php echo (int) $recipe['id']; ?>">
+                            <img src="<?php echo escape_html($recipeImage); ?>"
+                                alt="Inspirasi hidangan <?php echo escape_html($recipe['judul']); ?>" loading="lazy">
+                        </a>
                         <div class="article-card-body">
                             <span class="recipe-category"><?php echo escape_html($recipe['kategori']); ?></span>
                             <span class="article-date"><?php echo escape_html(date('d-m-Y', strtotime($recipe['created_at']))); ?></span>
@@ -94,13 +109,13 @@ $recipes = $statement->fetchAll();
                                 <?php echo escape_html($recipe['judul']); ?>
                             </a></h2>
                             <p><?php echo escape_html($recipe['ringkasan']); ?></p>
-                            <a class="action-link" href="baca_resep.php?id=<?php echo (int) $recipe['id']; ?>">Lihat resep →</a>
+                            <a class="action-link" href="baca_resep.php?id=<?php echo (int) $recipe['id']; ?>">Lihat resep</a>
                         </div>
                     </article>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </main>
-    <script src="assets/js/app.js?v=2"></script>
+    <script src="assets/js/app.js?v=3"></script>
 </body>
 </html>

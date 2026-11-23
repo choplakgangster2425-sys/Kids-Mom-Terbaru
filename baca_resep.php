@@ -18,7 +18,7 @@ if ($recipeId === false || $recipeId < 1) {
 }
 
 $statement = db()->prepare(
-    'SELECT judul, ringkasan, kategori, bahan, langkah, created_at
+    'SELECT judul, ringkasan, kategori, bahan, langkah, gambar_path, created_at
      FROM resep
      WHERE id = :id AND status = :status
      LIMIT 1'
@@ -53,6 +53,17 @@ if (!$recipe) {
 
     <main class="article-reader container recipe-reader">
         <article>
+            <?php
+                $recipeImage = $recipe['gambar_path'] !== null
+                    ? 'assets/img/' . rawurlencode($recipe['gambar_path'])
+                    : match ($recipe['kategori']) {
+                        'Ibu Hamil' => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=85',
+                        '6-8 Bulan' => 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=85',
+                        default => 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85',
+                    };
+            ?>
+            <img class="recipe-cover" src="<?php echo escape_html($recipeImage); ?>"
+                alt="Inspirasi hidangan <?php echo escape_html($recipe['judul']); ?>" fetchpriority="high">
             <span class="recipe-category"><?php echo escape_html($recipe['kategori']); ?></span>
             <span class="article-date"><?php echo escape_html(date('d-m-Y', strtotime($recipe['created_at']))); ?></span>
             <h1><?php echo escape_html($recipe['judul']); ?></h1>
@@ -74,6 +85,6 @@ if (!$recipe) {
             </p>
         </article>
     </main>
-    <script src="assets/js/app.js?v=2"></script>
+    <script src="assets/js/app.js?v=3"></script>
 </body>
 </html>

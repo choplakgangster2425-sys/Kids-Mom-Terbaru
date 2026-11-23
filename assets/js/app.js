@@ -49,6 +49,28 @@ document.querySelectorAll('form[data-confirm]').forEach((form) => {
 const adminSidebarToggle = document.querySelector('.admin-sidebar-toggle');
 const adminSidebar = document.querySelector('#admin-sidebar');
 const adminBackdrop = document.querySelector('[data-sidebar-close]');
+const adminSidebarCollapseToggle = document.querySelector('.admin-sidebar-collapse-toggle');
+const adminSidebarOpenToggle = document.querySelector('.admin-sidebar-open-toggle');
+const adminShell = adminSidebar ? adminSidebar.closest('.admin-shell') : null;
+
+const revealItems = document.querySelectorAll('[data-reveal]');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (revealItems.length > 0 && !reducedMotion && 'IntersectionObserver' in window) {
+    document.body.classList.add('motion-ready');
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    revealItems.forEach((item) => revealObserver.observe(item));
+} else {
+    revealItems.forEach((item) => item.classList.add('is-visible'));
+}
 
 if (adminSidebarToggle && adminSidebar) {
     const closeSidebar = () => {
@@ -74,5 +96,39 @@ if (adminSidebarToggle && adminSidebar) {
 
     adminSidebar.querySelectorAll('a').forEach((link) => {
         link.addEventListener('click', closeSidebar);
+    });
+}
+
+if (adminSidebar && adminShell) {
+    const mobileAdminLayout = window.matchMedia('(max-width: 960px)');
+    const setSidebarExpanded = (isExpanded) => {
+        adminShell.classList.toggle('sidebar-collapsed', !isExpanded);
+        adminSidebar.inert = !isExpanded;
+        adminSidebar.setAttribute('aria-hidden', String(!isExpanded));
+
+        [adminSidebarCollapseToggle, adminSidebarOpenToggle].forEach((toggle) => {
+            if (!toggle) {
+                return;
+            }
+
+            toggle.setAttribute('aria-expanded', String(isExpanded));
+            const label = isExpanded ? 'Perkecil sidebar' : 'Buka sidebar';
+            toggle.setAttribute('aria-label', label);
+            toggle.setAttribute('title', label);
+        });
+    };
+
+    if (adminSidebarCollapseToggle) {
+        adminSidebarCollapseToggle.addEventListener('click', () => setSidebarExpanded(false));
+    }
+
+    if (adminSidebarOpenToggle) {
+        adminSidebarOpenToggle.addEventListener('click', () => setSidebarExpanded(true));
+    }
+
+    mobileAdminLayout.addEventListener('change', (event) => {
+        if (event.matches) {
+            setSidebarExpanded(true);
+        }
     });
 }

@@ -215,8 +215,8 @@ if (isset($_GET['lihat'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jadwal Posyandu | Mom&amp;Kids+</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=2">
-    <link rel="stylesheet" href="../assets/css/auth.css?v=3">
+    <link rel="stylesheet" href="../assets/css/style.css?v=3">
+    <link rel="stylesheet" href="../assets/css/auth.css?v=6">
 </head>
 <body class="auth-page">
     <?php render_admin_sidebar_start('posyandu', $currentUser['nama'], '../'); ?>
@@ -364,6 +364,6 @@ if (isset($_GET['lihat'])) {
         <?php endif; ?>
     </main>
     <?php render_admin_sidebar_end(); ?>
-    <script src="../assets/js/app.js?v=3"></script>
+    <script src="../assets/js/app.js?v=6"></script>
 </body>
 </html>

@@ -61,8 +61,8 @@ $recentChecks = $recentStatement->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan | Mom&amp;Kids+</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=2">
-    <link rel="stylesheet" href="../assets/css/auth.css?v=3">
+    <link rel="stylesheet" href="../assets/css/style.css?v=3">
+    <link rel="stylesheet" href="../assets/css/auth.css?v=6">
     <style>
         @media print {
             .auth-header,
@@ -160,6 +160,6 @@ $recentChecks = $recentStatement->fetchAll();
         </section>
     </main>
     <?php render_admin_sidebar_end(); ?>
-    <script src="../assets/js/app.js?v=3"></script>
+    <script src="../assets/js/app.js?v=6"></script>
 </body>
 </html>

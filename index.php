@@ -20,7 +20,7 @@ $featureHref = static function (string $target) use ($isLoggedIn): string {
     <meta name="theme-color" content="#fff8f8">
     <meta name="description" content="Mom&Kids+ mendampingi ibu memantau tumbuh kembang anak dan menemukan informasi kesehatan keluarga.">
     <title>Mom&Kids+ | Temani Tumbuh Kembang Si Kecil</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=2">
+    <link rel="stylesheet" href="assets/css/style.css?v=3">
 </head>
 <body>
     <header class="site-header">
@@ -128,56 +128,61 @@ $featureHref = static function (string $target) use ($isLoggedIn): string {
                 </div>
 
                 <div class="feature-grid">
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <span class="feature-icon icon-pink" aria-hidden="true">♡</span>
                         <h3>Profil Ibu</h3>
                         <p>Simpan informasi dasar ibu dan kelola profil keluarga dengan praktis.</p>
-                        <a class="feature-action" href="<?php echo $featureHref($isAdmin ? 'admin/ibu.php' : 'profile.php'); ?>">Kelola profil <span aria-hidden="true">→</span></a>
+                        <a class="feature-action" href="<?php echo $featureHref($isAdmin ? 'admin/ibu.php' : 'profile.php'); ?>">Kelola profil</a>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <span class="feature-icon icon-peach" aria-hidden="true">⌁</span>
                         <h3>Buku KIA Digital</h3>
                         <p>Catat data anak dan pantau riwayat pengukuran tumbuh kembangnya.</p>
-                        <a class="feature-action" href="<?php echo $featureHref('anak.php'); ?>">Buka data anak <span aria-hidden="true">→</span></a>
+                        <a class="feature-action" href="<?php echo $featureHref('anak.php'); ?>">Buka data anak</a>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <span class="feature-icon icon-lilac" aria-hidden="true">♡</span>
                         <h3>Pantau Gizi</h3>
                         <p>Lihat indikasi status gizi anak dari data usia, berat, dan tinggi badan.</p>
-                        <a class="feature-action" href="<?php echo $featureHref('cek_gizi.php'); ?>">Mulai cek gizi <span aria-hidden="true">→</span></a>
+                        <a class="feature-action" href="<?php echo $featureHref('cek_gizi.php'); ?>">Mulai cek gizi</a>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <span class="feature-icon icon-yellow" aria-hidden="true">✿</span>
                         <h3>Artikel &amp; Resep</h3>
                         <p>Temukan bacaan kesehatan dan inspirasi menu MPASI sesuai usia.</p>
-                        <a class="feature-action" href="<?php echo $featureHref('artikel.php'); ?>">Baca artikel <span aria-hidden="true">→</span></a>
-                        <a class="feature-action" href="<?php echo $featureHref('resep.php'); ?>" style="margin-left: 14px;">Lihat resep <span aria-hidden="true">→</span></a>
+                        <a class="feature-action" href="<?php echo $featureHref('artikel.php'); ?>">Baca artikel</a>
+                        <a class="feature-action" href="<?php echo $featureHref('resep.php'); ?>">Lihat resep</a>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <span class="feature-icon icon-pink" aria-hidden="true">♡</span>
                         <h3>Jadwal Posyandu</h3>
                         <p>Lihat kegiatan Posyandu mendatang dan daftar kehadiran dengan mudah.</p>
-                        <a class="feature-action" href="<?php echo $featureHref($isAdmin ? 'admin/posyandu.php' : 'posyandu.php'); ?>">Lihat jadwal <span aria-hidden="true">→</span></a>
+                        <a class="feature-action" href="<?php echo $featureHref($isAdmin ? 'admin/posyandu.php' : 'posyandu.php'); ?>">Lihat jadwal</a>
                     </article>
-                    <article class="feature-card">
+                    <article class="feature-card" data-reveal>
                         <span class="feature-icon icon-lilac" aria-hidden="true">?</span>
                         <h3>Tanya Bidan</h3>
                         <p>Kirim pertanyaan dan pantau balasan Admin/Bidan melalui konsultasi.</p>
-                        <a class="feature-action" href="<?php echo $featureHref($isAdmin ? 'admin/konsultasi.php' : 'konsultasi.php'); ?>">Kirim pertanyaan <span aria-hidden="true">→</span></a>
+                        <a class="feature-action" href="<?php echo $featureHref($isAdmin ? 'admin/konsultasi.php' : 'konsultasi.php'); ?>">Kirim pertanyaan</a>
                     </article>
                 </div>
             </div>
         </section>
 
-        <section class="about-section container" id="tentang">
+        <section class="about-section container" id="tentang" data-reveal>
             <div class="about-badge" aria-hidden="true"><span>Mom<br>&amp; Kids</span><strong>+</strong></div>
             <div>
                 <span class="eyebrow">Tentang Mom&amp;Kids+</span>
                 <h2>Merawat tumbuh kembang, <span>dimulai dari perhatian.</span></h2>
                 <p>
                     Mom&amp;Kids+ adalah ruang digital untuk membantu ibu mencatat perjalanan
-                    tumbuh kembang anak dan mengakses informasi keluarga dalam satu tempat.
+                    tumbuh kembang anak dan mengakses informasi keluarga dalam satu tempat. Mulai dari
+                    menyimpan data keluarga, melihat catatan pengukuran, hingga menemukan inspirasi
+                    makanan sehat dan edukasi yang mudah dipahami, semuanya dirancang untuk menemani
+                    ibu mengambil langkah kecil yang berarti setiap hari. Informasi di Mom&amp;Kids+
+                    melengkapi, bukan menggantikan, saran dari bidan atau tenaga kesehatan.
                 </p>
+                <a class="button button-small button-outline about-action" href="#fitur">Jelajahi dukungan keluarga</a>
             </div>
         </section>
     </main>
@@ -187,11 +192,20 @@ $featureHref = static function (string $target) use ($isLoggedIn): string {
             <a class="brand footer-brand" href="#beranda">
                 <img class="brand-logo" src="assets/img/LOGO%20Mom%26Kids%2B-3.png" alt="Mom&amp;Kids+">
             </a>
-            <p>Menemani ibu, mendukung tumbuh kembang si kecil.</p>
-            <span class="copyright">&copy; <?php echo date('Y'); ?> Mom&amp;Kids+</span>
+            <div class="footer-message">
+                <strong>Temani tumbuhnya, jaga sehatnya.</strong>
+                <p>Ruang praktis untuk catatan tumbuh kembang, edukasi keluarga, dan inspirasi menu sehat.</p>
+            </div>
+            <nav class="footer-links" aria-label="Tautan cepat">
+                <a href="#fitur">Fitur</a>
+                <a href="#tentang">Tentang kami</a>
+                <a href="<?php echo $featureHref('artikel.php'); ?>">Artikel</a>
+                <a href="<?php echo $featureHref('resep.php'); ?>">Resep sehat</a>
+            </nav>
+            <span class="copyright">&copy; <?php echo date('Y'); ?> Mom&amp;Kids+. Dibuat dengan perhatian untuk ibu dan anak.</span>
         </div>
     </footer>
 
-    <script src="assets/js/app.js?v=2"></script>
+    <script src="assets/js/app.js?v=3"></script>
 </body>
 </html>
