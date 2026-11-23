@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+function article_categories(): array
+{
+    return ['AI', 'ASI', 'Gizi', 'Kehamilan', 'MPASI', 'Stunting', 'Tumbuh Kembang'];
+}
+
 function article_slug(string $title): string
 {
     $transliterated = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $title);

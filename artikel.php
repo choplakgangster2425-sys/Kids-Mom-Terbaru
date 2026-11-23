@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/articles.php';
 require_login();
 
 $currentUser = current_user();
@@ -12,35 +13,14 @@ if ($currentUser === null) {
 $homeUrl = home_url_for_role($currentUser['role']);
 
 $search = trim(is_string($_GET['q'] ?? null) ? $_GET['q'] : '');
-$categories = ['AI', 'ASI', 'Gizi', 'Kehamilan', 'MPASI', 'Stunting', 'Tumbuh Kembang'];
+$categories = article_categories();
 $category = trim(is_string($_GET['kategori'] ?? null) ? $_GET['kategori'] : '');
 if ($category !== '' && !in_array($category, $categories, true)) {
     http_response_code(400);
     exit('Kategori artikel tidak valid.');
 }
 
-$articleCategory = static function (array $article): string {
-    $text = strtolower($article['judul'] . ' ' . $article['ringkasan']);
-    if (str_contains($text, 'mpasi')) {
-        return 'MPASI';
-    }
-    if (str_contains($text, 'stunting')) {
-        return 'Stunting';
-    }
-    if (str_contains($text, 'kehamil')) {
-        return 'Kehamilan';
-    }
-    if (preg_match('/(^|[^a-z])asi([^a-z]|$)/', $text) === 1 || str_contains($text, 'menyusu')) {
-        return 'ASI';
-    }
-    if (str_contains($text, 'posyandu') || str_contains($text, 'tumbuh kembang')) {
-        return 'Tumbuh Kembang';
-    }
-
-    return 'Gizi';
-};
-
-$articlesSql = 'SELECT id, judul, ringkasan, gambar_path, created_at
+$articlesSql = 'SELECT id, judul, ringkasan, kategori, gambar_path, created_at
                 FROM artikel
                 WHERE status = :status';
 $parameters = ['status' => 'published'];
@@ -51,16 +31,15 @@ if ($search !== '') {
     $parameters['ringkasan_search'] = '%' . $search . '%';
 }
 
+if ($category !== '') {
+    $articlesSql .= ' AND kategori = :kategori';
+    $parameters['kategori'] = $category;
+}
+
 $articlesSql .= ' ORDER BY created_at DESC, id DESC';
 $statement = db()->prepare($articlesSql);
 $statement->execute($parameters);
 $articles = $statement->fetchAll();
-if ($category !== '') {
-    $articles = array_values(array_filter(
-        $articles,
-        static fn (array $article): bool => $articleCategory($article) === $category
-    ));
-}
 
 ?>
 <!DOCTYPE html>
@@ -99,6 +78,9 @@ if ($category !== '') {
             <label class="sr-only" for="q">Cari judul artikel</label>
             <input id="q" name="q" type="search" maxlength="180"
                 placeholder="Cari artikel..." value="<?php echo escape_html($search); ?>">
+            <?php if ($category !== ''): ?>
+                <input type="hidden" name="kategori" value="<?php echo escape_html($category); ?>">
+            <?php endif; ?>
             <button class="button button-primary" type="submit">Cari</button>
         </form>
 
@@ -133,7 +115,7 @@ if ($category !== '') {
                             </a>
                         <?php endif; ?>
                         <div class="article-card-body">
-                            <span class="recipe-category"><?php echo escape_html($articleCategory($article)); ?></span>
+                            <span class="recipe-category"><?php echo escape_html($article['kategori']); ?></span>
                             <span class="article-date"><?php echo escape_html(date('d-m-Y', strtotime($article['created_at']))); ?></span>
                             <h2><a href="baca_artikel.php?id=<?php echo (int) $article['id']; ?>">
                                 <?php echo escape_html($article['judul']); ?>

@@ -13,6 +13,12 @@ Website pendamping ibu dan anak berbasis PHP, MySQL, HTML, CSS, dan JavaScript u
 
 Koneksi database lokal menggunakan `localhost`, database `momkids_db`, user `root`, dan password kosong. Atur environment `DB_HOST`, `DB_NAME`, `DB_USER`, dan `DB_PASSWORD` bila konfigurasi XAMPP berbeda.
 
+## Kategori artikel
+
+Artikel memiliki kategori **AI**, **ASI**, **Gizi**, **Kehamilan**, **MPASI**, **Stunting**, dan **Tumbuh Kembang**. Pilih kategori saat menambah atau mengubah artikel di menu Admin **Kelola artikel**; kategori yang disimpan dipakai di daftar dan filter artikel.
+
+Untuk database lama, jalankan `database/migrations/2026-11-23-add-article-categories.sql` satu kali di phpMyAdmin setelah memilih database proyek. Migrasi menambahkan kolom kategori dan mengelompokkan artikel lama berdasarkan judulnya. Untuk instalasi baru, kolom ini sudah termasuk di `database/momkids.sql`.
+
 ## Pembagian role
 
 - **Admin/Bidan:** melihat daftar Ibu, mengelola seluruh data anak, artikel, resep, jadwal Posyandu, menjawab konsultasi, dan melihat/mencetak laporan.

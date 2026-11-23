@@ -20,9 +20,11 @@ if ($currentUser['role'] !== 'admin') {
 $form = [
     'judul' => '',
     'ringkasan' => '',
+    'kategori' => '',
     'konten' => '',
     'status' => 'draft',
 ];
+$categories = article_categories();
 $articleId = null;
 $editingArticle = null;
 $errors = [];
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['edit'])) {
     }
 
     $editStatement = db()->prepare(
-        'SELECT id, judul, ringkasan, konten, gambar_path, status
+        'SELECT id, judul, ringkasan, kategori, konten, gambar_path, status
          FROM artikel WHERE id = :id LIMIT 1'
     );
     $editStatement->execute(['id' => $articleId]);
@@ -52,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['edit'])) {
     $form = [
         'judul' => $editingArticle['judul'],
         'ringkasan' => $editingArticle['ringkasan'],
+        'kategori' => $editingArticle['kategori'],
         'konten' => $editingArticle['konten'],
         'status' => $editingArticle['status'],
     ];
@@ -104,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $editStatement = db()->prepare(
-                'SELECT id, judul, ringkasan, konten, gambar_path, status
+                'SELECT id, judul, ringkasan, kategori, konten, gambar_path, status
                  FROM artikel WHERE id = :id LIMIT 1'
             );
             $editStatement->execute(['id' => $articleId]);
@@ -128,6 +131,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if ($form['ringkasan'] === '' || $summaryLength === false || $summaryLength > 500) {
             $errors[] = 'Ringkasan wajib diisi dan maksimal 500 karakter.';
+        }
+        if (!in_array($form['kategori'], $categories, true)) {
+            $errors[] = 'Pilih kategori artikel yang tersedia.';
         }
         if ($form['konten'] === '') {
             $errors[] = 'Konten artikel wajib diisi.';
@@ -158,13 +164,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $updateStatement = db()->prepare(
                         'UPDATE artikel
                          SET judul = :judul, slug = :slug, ringkasan = :ringkasan,
-                             konten = :konten, gambar_path = :gambar_path, status = :status
+                             kategori = :kategori, konten = :konten,
+                             gambar_path = :gambar_path, status = :status
                          WHERE id = :id'
                     );
                     $updateStatement->execute([
                         'judul' => $form['judul'],
                         'slug' => $slug,
                         'ringkasan' => $form['ringkasan'],
+                        'kategori' => $form['kategori'],
                         'konten' => $form['konten'],
                         'gambar_path' => $imagePath,
                         'status' => $form['status'],
@@ -174,13 +182,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $insertStatement = db()->prepare(
                         'INSERT INTO artikel
-                         (judul, slug, ringkasan, konten, gambar_path, status, created_by)
-                         VALUES (:judul, :slug, :ringkasan, :konten, :gambar_path, :status, :created_by)'
+                         (judul, slug, ringkasan, kategori, konten, gambar_path, status, created_by)
+                         VALUES (:judul, :slug, :ringkasan, :kategori, :konten, :gambar_path, :status, :created_by)'
                     );
                     $insertStatement->execute([
                         'judul' => $form['judul'],
                         'slug' => $slug,
                         'ringkasan' => $form['ringkasan'],
+                        'kategori' => $form['kategori'],
                         'konten' => $form['konten'],
                         'gambar_path' => $imagePath,
                         'status' => $form['status'],
@@ -205,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $articles = db()->query(
-    'SELECT id, judul, status, created_at, updated_at
+    'SELECT id, judul, kategori, status, created_at, updated_at
      FROM artikel
      ORDER BY updated_at DESC, id DESC'
 )->fetchAll();
@@ -218,7 +227,7 @@ $articles = db()->query(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Artikel | Mom&amp;Kids+</title>
     <link rel="stylesheet" href="../assets/css/style.css?v=3">
-    <link rel="stylesheet" href="../assets/css/auth.css?v=6">
+    <link rel="stylesheet" href="../assets/css/auth.css?v=7">
 </head>
 <body class="auth-page">
     <?php render_admin_sidebar_start('artikel', $currentUser['nama'], '../'); ?>
@@ -260,6 +269,19 @@ $articles = db()->query(
                     <textarea id="ringkasan" name="ringkasan" rows="3" maxlength="500" required><?php
                         echo escape_html($form['ringkasan']);
                     ?></textarea>
+
+                    <label for="kategori">Kategori artikel</label>
+                    <select id="kategori" name="kategori" required>
+                        <option value="" disabled <?php echo $form['kategori'] === '' ? 'selected' : ''; ?>>
+                            Pilih kategori
+                        </option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?php echo escape_html($category); ?>"
+                                <?php echo $form['kategori'] === $category ? 'selected' : ''; ?>>
+                                <?php echo escape_html($category); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
 
                     <label for="konten">Konten</label>
                     <textarea id="konten" name="konten" rows="9" required><?php
@@ -310,6 +332,7 @@ $articles = db()->query(
                             <thead>
                                 <tr>
                                     <th>Judul</th>
+                                    <th>Kategori</th>
                                     <th>Status</th>
                                     <th>Diperbarui</th>
                                     <th>Aksi</th>
@@ -319,6 +342,7 @@ $articles = db()->query(
                                 <?php foreach ($articles as $article): ?>
                                     <tr>
                                         <td><?php echo escape_html($article['judul']); ?></td>
+                                        <td><?php echo escape_html($article['kategori']); ?></td>
                                         <td><?php echo $article['status'] === 'published' ? 'Terbit' : 'Draft'; ?></td>
                                         <td><?php echo escape_html(date('d-m-Y', strtotime($article['updated_at']))); ?></td>
                                         <td>

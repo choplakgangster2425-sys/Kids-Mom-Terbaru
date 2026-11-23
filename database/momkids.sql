@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS artikel (
     judul VARCHAR(180) NOT NULL,
     slug VARCHAR(200) NOT NULL UNIQUE,
     ringkasan VARCHAR(500) NOT NULL,
+    kategori ENUM('AI', 'ASI', 'Gizi', 'Kehamilan', 'MPASI', 'Stunting', 'Tumbuh Kembang') NOT NULL DEFAULT 'Gizi',
     konten MEDIUMTEXT NOT NULL,
     gambar_path VARCHAR(255) NULL,
     status ENUM('draft', 'published') NOT NULL DEFAULT 'draft',
@@ -213,12 +214,13 @@ WHERE NOT EXISTS (
 -- =========================================================
 -- DATA AWAL: ARTIKEL EDUKASI (5 artikel published)
 -- =========================================================
-INSERT IGNORE INTO artikel (judul, slug, ringkasan, konten, gambar_path, status, created_by)
+INSERT IGNORE INTO artikel (judul, slug, ringkasan, kategori, konten, gambar_path, status, created_by)
 VALUES
 (
     'Mengenal 1000 Hari Pertama Kehidupan (HPK) untuk Cegah Stunting',
     'mengenal-1000-hari-pertama-kehidupan-hpk',
     'Periode sejak awal kehamilan hingga anak berusia 2 tahun adalah masa emas pertumbuhan otak dan fisik yang menentukan kesehatan jangka panjang.',
+    'Stunting',
     '1000 Hari Pertama Kehidupan (HPK) dimulai sejak hari pertama kehamilan (270 hari di dalam kandungan) hingga anak mencapai usia 2 tahun (730 hari). Pada masa ini, pertumbuhan otak dan organ vital berlangsung sangat pesat.
 
 Untuk mendukung tumbuh kembang optimal dan mencegah stunting, ada beberapa langkah penting yang perlu diperhatikan:
@@ -237,6 +239,7 @@ Jika grafik pertumbuhan anak melandai atau berada di bawah garis normal, segera 
     'Panduan Memulai MPASI Pertama untuk Bayi Usia 6 Bulan',
     'panduan-memulai-mpasi-usia-6-bulan',
     'Kenali tanda kesiapan makan bayi, tekstur yang tepat, serta prinsip menu lengkap agar si kecil lahap dan nutrisinya tercukupi.',
+    'MPASI',
     'Saat memasuki usia 6 bulan, ASI saja sudah tidak lagi mencukupi seluruh kebutuhan energi dan zat besi bayi. Inilah saat yang tepat untuk memperkenalkan Makanan Pendamping ASI (MPASI).
 
 Tanda bayi siap menerima MPASI:
@@ -258,6 +261,7 @@ Hindari pemberian madu sebelum usia 1 tahun dan pastikan kebersihan tangan serta
     'Pentingnya Rutin Menimbang dan Mengukur Tinggi Anak di Posyandu',
     'pentingnya-pemantauan-berat-dan-tinggi-di-posyandu',
     'Pengukuran rutin setiap bulan membantu mendeteksi gangguan pertumbuhan lebih awal sebelum berkembang menjadi kurang gizi atau stunting.',
+    'Tumbuh Kembang',
     'Membawa balita ke Posyandu setiap bulan bukan sekadar mencatat angka berat badan, melainkan cara efektif untuk melihat tren pertumbuhan anak dari waktu ke waktu.
 
 Mengapa pemantauan rutin sangat penting?
@@ -274,6 +278,7 @@ Simpan setiap hasil pengukuran di Buku KIA maupun fitur Buku KIA Digital di Mom&
     'Nutrisi Penting untuk Ibu Hamil dari Trimester 1 hingga 3',
     'nutrisi-penting-untuk-ibu-hamil-trimester-1-hingga-3',
     'Kebutuhan zat gizi ibu hamil meningkat di setiap trimester untuk mendukung perkembangan janin sekaligus menjaga stamina ibu.',
+    'Kehamilan',
     'Selama kehamilan, tubuh ibu membutuhkan asupan energi dan mikronutrien tambahan agar janin berkembang sehat.
 
 Zat gizi utama yang perlu diperhatikan:
@@ -292,6 +297,7 @@ Selalu konsultasikan suplemen kehamilan dengan bidan atau dokter kandungan saat 
     'Tanda Bahaya Tumbuh Kembang Balita yang Perlu Diwaspadai',
     'tanda-bahaya-tumbuh-kembang-balita-yang-perlu-diwaspadai',
     'Kenali sinyal awal keterlambatan pertumbuhan dan perkembangan agar orang tua dapat segera berkonsultasi dengan tenaga kesehatan.',
+    'Tumbuh Kembang',
     'Setiap anak memiliki kecepatan tumbuh kembang yang unik, namun ada beberapa tanda peringatan (red flags) yang sebaiknya tidak diabaikan oleh orang tua.
 
 Tanda yang perlu segera dikonsultasikan ke bidan atau dokter anak:
